@@ -49,7 +49,7 @@ func menuUtama() int {
 
 	fmt.Print("\nMasukkan Menu : ")
 	fmt.Scanln(&inputUser)
-	footer() // Tambahkan footer
+	footer()
 	return inputUser
 }
 
@@ -69,12 +69,11 @@ func tambahInvestasi(dataInvestasi *arrInvestasi, nInvestasi *int) {
 
 	fmt.Print("Jumlah Dana yang Diinvestasikan: ")
 	fmt.Scanln(&dataInvestasi[*nInvestasi].jumlahDana)
-	dataInvestasi[*nInvestasi].nilaiAwal = dataInvestasi[*nInvestasi].jumlahDana // Asumsi nilai awal sama dengan dana awal
+	dataInvestasi[*nInvestasi].nilaiAwal = dataInvestasi[*nInvestasi].jumlahDana
 
 	fmt.Print("Nilai Aset Terkini: ")
 	fmt.Scanln(&dataInvestasi[*nInvestasi].nilaiAkhir)
 
-	// Hitung keuntungan dan persentase
 	if dataInvestasi[*nInvestasi].nilaiAwal != 0 {
 		dataInvestasi[*nInvestasi].persenUntung = (dataInvestasi[*nInvestasi].nilaiAkhir - dataInvestasi[*nInvestasi].nilaiAwal) / dataInvestasi[*nInvestasi].nilaiAwal * 100
 	} else {
@@ -84,7 +83,7 @@ func tambahInvestasi(dataInvestasi *arrInvestasi, nInvestasi *int) {
 	*nInvestasi++
 
 	fmt.Println("\nData investasi berhasil ditambahkan.")
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Function untuk mengedit data investasi
@@ -110,14 +109,12 @@ func editInvestasi(dataInvestasi *arrInvestasi, nInvestasi int) {
 		fmt.Scanln(&dataInvestasi[indeks].jenisAset)
 
 		fmt.Print("Jumlah Dana Baru: ")
-		fmt.Scanln(&dataInvestasi[indeks].jenisAset) // Perbaikan: Seharusnya dataInvestasi[indeks].jumlahDana
-		// fmt.Scanln(&dataInvestasi[indeks].jumlahDana) // Ini adalah yang benar
-		dataInvestasi[indeks].nilaiAwal = dataInvestasi[indeks].jumlahDana // Update nilai awal
+		fmt.Scanln(&dataInvestasi[indeks].jenisAset)
+		dataInvestasi[indeks].nilaiAwal = dataInvestasi[indeks].jumlahDana
 
 		fmt.Print("Nilai Aset Terkini Baru: ")
 		fmt.Scanln(&dataInvestasi[indeks].nilaiAkhir)
 
-		// Hitung ulang keuntungan
 		if dataInvestasi[indeks].nilaiAwal != 0 {
 			dataInvestasi[indeks].persenUntung = (dataInvestasi[indeks].nilaiAkhir - dataInvestasi[indeks].nilaiAwal) / dataInvestasi[indeks].nilaiAwal * 100
 		} else {
@@ -129,7 +126,7 @@ func editInvestasi(dataInvestasi *arrInvestasi, nInvestasi int) {
 	} else {
 		fmt.Println("\nData investasi tidak ditemukan.")
 	}
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Function untuk menghapus data investasi
@@ -152,12 +149,11 @@ func hapusInvestasi(dataInvestasi *arrInvestasi, nInvestasi *int) {
 	} else {
 		fmt.Println("\nData investasi tidak ditemukan.")
 	}
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Function untuk mencari data investasi (Sequential Search)
 func cariInvestasiSequential(dataInvestasi arrInvestasi, nInvestasi int, keyword string, jenisPencarian int) int {
-	// jenisPencarian: 1 untuk cari nama (partial match), 2 untuk cari jenis (exact match)
 	for i := 0; i < nInvestasi; i++ {
 		if jenisPencarian == 1 && strings.Contains(strings.ToLower(dataInvestasi[i].jenisAset), strings.ToLower(keyword)) {
 			return i
@@ -168,7 +164,7 @@ func cariInvestasiSequential(dataInvestasi arrInvestasi, nInvestasi int, keyword
 	return -1
 }
 
-// Function untuk mencari data investasi (Binary Search) - memerlukan data terurut berdasarkan jenis aset
+// Function untuk mencari data investasi (Binary Search)
 func cariInvestasiBinary(dataInvestasi arrInvestasi, nInvestasi int, keyword string) int {
 	left, right := 0, nInvestasi-1
 	for left <= right {
@@ -216,35 +212,28 @@ func menuCariInvestasi(dataInvestasi arrInvestasi, nInvestasi int) {
 	var keyword string
 
 	fmt.Println("\n=== Cari Data Investasi ===")
-	fmt.Println("1. Cari Berdasarkan Nama Aset (Sequential)")
-	fmt.Println("2. Cari Berdasarkan Jenis Aset (Sequential)")
-	fmt.Println("3. Cari Berdasarkan Jenis Aset (Binary) - Data harus terurut")
+	fmt.Println("1. Cari Berdasarkan Jenis Aset (Sequential)")
+	fmt.Println("2. Cari Berdasarkan Jenis Aset (Binary) - Data harus terurut")
 	fmt.Println("0. Kembali")
 
 	fmt.Print("Masukkan Menu : ")
 	fmt.Scanln(&inputUser)
 
 	if inputUser == 1 {
-		fmt.Print("Masukkan Nama Aset: ")
+		fmt.Print("Masukkan Jenis Aset: ")
 		fmt.Scanln(&keyword)
 		indeks := cariInvestasiSequential(dataInvestasi, nInvestasi, keyword, 1)
 		tampilkanHasilPencarian(dataInvestasi, indeks)
 	} else if inputUser == 2 {
 		fmt.Print("Masukkan Jenis Aset: ")
 		fmt.Scanln(&keyword)
-		indeks := cariInvestasiSequential(dataInvestasi, nInvestasi, keyword, 2)
-		tampilkanHasilPencarian(dataInvestasi, indeks)
-	} else if inputUser == 3 {
-		fmt.Print("Masukkan Jenis Aset: ")
-		fmt.Scanln(&keyword)
 		indeks := cariInvestasiBinary(dataInvestasi, nInvestasi, keyword)
 		tampilkanHasilPencarian(dataInvestasi, indeks)
 	} else if inputUser == 0 {
-		// Kembali tanpa footer karena ini adalah menu, bukan akhir dari proses
 	} else {
 		fmt.Println("Input Invalid")
 	}
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Function untuk mengurutkan data investasi (Selection Sort)
@@ -305,13 +294,12 @@ func menuUrutInvestasi(dataInvestasi *arrInvestasi, nInvestasi int) {
 			urutkanInvestasiInsertion(dataInvestasi, nInvestasi, jenisUrut)
 		}
 		fmt.Println("\nData berhasil diurutkan.")
-		tampilkanLaporanInvestasi(*dataInvestasi, nInvestasi) // Laporan sudah ada footer di dalamnya
+		tampilkanLaporanInvestasi(*dataInvestasi, nInvestasi)
 	} else if inputUser == 0 {
-		// Kembali tanpa footer karena ini adalah menu, bukan akhir dari proses
 	} else {
 		fmt.Println("Input Invalid")
 	}
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Function untuk menampilkan laporan investasi
@@ -321,7 +309,7 @@ func tampilkanLaporanInvestasi(dataInvestasi arrInvestasi, nInvestasi int) {
 	if nInvestasi == 0 {
 		fmt.Println("Belum ada data investasi yang tersedia.")
 		fmt.Println("--------------------------------------------------------------------------------------------\n")
-		footer() // Tambahkan footer
+		footer()
 		return
 	}
 	fmt.Println("--------------------------------------------------------------------------------------------")
@@ -331,13 +319,13 @@ func tampilkanLaporanInvestasi(dataInvestasi arrInvestasi, nInvestasi int) {
 		fmt.Printf("| %-4d | %-15s | %-12.2f | %-12.2f | %-12.2f | %-16.2f%% |\n", dataInvestasi[i].id, dataInvestasi[i].jenisAset, dataInvestasi[i].jumlahDana, dataInvestasi[i].nilaiAwal, dataInvestasi[i].nilaiAkhir, dataInvestasi[i].persenUntung)
 	}
 	fmt.Println("--------------------------------------------------------------------------------------------\n")
-	footer() // Tambahkan footer
+	footer()
 }
 
 // Fungsi menuLogin yang sudah dilanjutkan
 func menuLogin() int {
-	header()                   // Tampilkan header di awal login
-	const MAX_ATTEMPTS int = 3 // Batas percobaan login
+	header()
+	const max int = 5
 	var (
 		username string
 		password int
@@ -346,8 +334,8 @@ func menuLogin() int {
 
 	fmt.Println("\n=== Halaman Login ===")
 
-	for attempts < MAX_ATTEMPTS {
-		fmt.Printf("Percobaan %d dari %d\n", attempts+1, MAX_ATTEMPTS)
+	for attempts < max {
+		fmt.Printf("Percobaan %d dari %d\n", attempts+1, max)
 		fmt.Print("Username : ")
 		fmt.Scanln(&username)
 		fmt.Print("Password : ")
@@ -357,8 +345,8 @@ func menuLogin() int {
 
 		if processedUsername == "admin" && password == 123123 {
 			fmt.Println("\nLogin Berhasil!")
-			footer() // Tambahkan footer
-			return 1 // Berhasil login
+			footer()
+			return 1
 		} else {
 			fmt.Println("Username atau Password Salah.")
 			attempts++
@@ -366,8 +354,8 @@ func menuLogin() int {
 	}
 
 	fmt.Println("\nAnda telah melebihi batas percobaan login.")
-	footer()  // Tambahkan footer
-	return -1 // Gagal login setelah percobaan habis
+	footer()
+	return -1
 }
 
 func main() {
@@ -379,7 +367,7 @@ func main() {
 	)
 
 	nInvestasi = 0
-	statusLogin = -1 // Awalnya belum login
+	statusLogin = -1
 
 	for statusLogin != 0 {
 		if statusLogin == -1 {
